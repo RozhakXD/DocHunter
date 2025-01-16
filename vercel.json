@@ -1,14 +1,14 @@
 {
     "builds": [
       {
-        "src": "vercel_app.py",
+        "src": "DocHunter/wsgi.py",
         "use": "@vercel/python"
       }
     ],
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "vercel_app.py"
+        "dest": "DocHunter/wsgi.py"
       }
     ]
   }

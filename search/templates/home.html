@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocHunter - Find Your Documents</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/script.js' %}" defer></script>
+</head>
+<body class="bg-gray-50 font-sans">
+    
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-green-200 to-blue-200 text-gray-800 p-4 md:p-6 shadow-sm header-animation">
+        <div class="container mx-auto">
+            <div class="flex flex-wrap items-center justify-between">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <i class="fas fa-file-alt text-2xl md:text-3xl mr-3 text-blue-600"></i>
+                    <h1 class="text-2xl md:text-4xl font-bold text-gradient">DocHunter</h1>
+                </div>
+                <p class="text-base md:text-lg text-gray-700 text-center md:text-left">
+                    Find Your Documents Easily
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Section -->
+    <main class="container mx-auto p-6">
+        <div class="mb-8">
+            <form id="searchForm" class="glassmorphism p-6 shadow-sm">
+                <div class="relative">
+                    <i class="fas fa-search input-icon"></i>
+                    <input type="text" id="searchInput" name="query" placeholder="What are you looking for? (e.g., 'Quiz Sistem Operasi')" class="w-full p-4 rounded-lg bg-white bg-opacity-70 focus:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-blue-300 input-field">
+                </div>
+                <button type="submit" class="w-full mt-4 p-4 bg-gradient-to-r from-green-400 to-blue-400 text-white rounded-lg hover:from-green-500 hover:to-blue-500 transition-all button-click">
+                    <i class="fas fa-search mr-2"></i> Search
+                </button>
+            </form>
+        </div>
+
+        <!-- Search Results -->
+        <div id="resultsContainer" class="space-y-6">
+
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading" class="text-center mt-10 text-blue-500 hidden">
+            <i class="fas fa-spinner fa-spin fa-3x"></i>
+        </div>
+
+        <!-- No Results Message -->
+        <div id="noResults" class="text-center mt-10 text-gray-600 hidden">
+            <p class="text-xl">No results found for your query.</p>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gradient-to-r from-green-200 to-blue-200 text-gray-800 mt-12 py-8">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0">
+                <div class="flex-1 max-w-md">
+                    <h3 class="text-xl font-bold mb-4">About DocHunter</h3>
+                    <p class="text-gray-700">DocHunter is a modern search engine designed to help you find documents quickly and efficiently. Whether you're looking for academic papers, quizzes, or professional documents, DocHunter has got you covered.</p>
+                </div>
+
+                <div class="flex-1 flex justify-end">
+                    <div>
+                        <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+                        <div class="flex space-x-4">
+                            <a href="https://www.instagram.com/rozhak_official" class="text-gray-700 hover:text-blue-600"><i class="fab fa-instagram text-2xl"></i></a>
+                            <a href="https://x.com/rozhak_official" class="text-gray-700 hover:text-blue-600"><i class="fab fa-twitter text-2xl"></i></a>
+                            <a href="https://github.com/rozhakxd" class="text-gray-700 hover:text-blue-600"><i class="fab fa-github text-2xl"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-8 pt-8 border-t border-gray-300">
+                <p class="text-gray-700">&copy; 2025 DocHunter. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const query = document.getElementById('searchInput').value.trim();
+
+        if (query === '') return;
+
+        document.getElementById('loading').classList.remove('hidden');
+        document.getElementById('resultsContainer').innerHTML = '';
+        document.getElementById('noResults').classList.add('hidden');
+        
+        fetch(`/search/?query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                const results = data.results.organic;
+                if (results.length === 0) {
+                    document.getElementById('noResults').classList.remove('hidden');
+                } else {
+                    let html = '';
+                    results.forEach(result => {
+                        html += `
+                            <div class="glassmorphism p-6 hover-scale fade-in">
+                                <h2 class="text-2xl font-bold text-gray-800">${result.title}</h2>
+                                <a href="${result.link}" target="_blank" class="text-blue-500 hover:text-blue-700 hover:underline">${result.link}</a>
+                                <p class="mt-2 text-gray-700">${result.snippet}</p>
+                                <p class="mt-2 text-gray-500">Position: ${result.position}</p>
+                                ${result.rating ? `<div class="flex items-center mt-2">
+                                    <span class="text-yellow-400 mr-1">&#9733;</span>
+                                    <span class="text-gray-600">${result.rating} (${result.ratingCount})</span>
+                                </div>` : ''}
+                            </div>
+                        `;
+                    });
+                    document.getElementById('resultsContainer').innerHTML = html;
+                }
+                document.getElementById('loading').classList.add('hidden');
+            })
+            .catch(error => {
+                console.error(error);
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('noResults').classList.remove('hidden');
+            });
+    });
+    </script>
+</body>
+</html>

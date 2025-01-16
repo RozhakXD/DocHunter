@@ -4,11 +4,11 @@
 **DocHunter** adalah sebuah mesin pencari dokumen modern yang dirancang untuk membantu Anda menemukan dokumen dengan cepat dan efisien. Baik Anda mencari makalah akademik, kuis, atau dokumen profesional, **DocHunter** siap membantu! 🌟
 
 ## 🌟 Fitur Utama
-- **🔍 Pencarian Cepat**: Temukan dokumen dalam hitungan detik.
 - **📂 Multi-Sumber**: Mencari dokumen dari berbagai sumber terpercaya.
 - **📊 Hasil Terstruktur**: Hasil pencarian ditampilkan dengan judul, link, cuplikan, dan peringkat.
-- **📱 Responsif**: Tampilan yang ramah untuk desktop dan mobile.
+- **🔍 Pencarian Cepat**: Temukan dokumen dalam hitungan detik.
 - **🎨 Desain Modern**: Antarmuka yang menarik dengan efek glassmorphism dan animasi halus.
+- **📱 Responsif**: Tampilan yang ramah untuk desktop dan mobile.
 
 ## 🛠️ Teknologi yang Digunakan
 - **Backend**: Django (Python) 🐍

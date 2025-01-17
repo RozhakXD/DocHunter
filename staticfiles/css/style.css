@@ -70,3 +70,11 @@
 .button-click:active {
     transform: scale(0.95);
 }
+
+.link-container {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    max-width: 100%;
+    white-space: nowrap;
+}
